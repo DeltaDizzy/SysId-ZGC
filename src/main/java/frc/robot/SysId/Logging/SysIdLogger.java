@@ -133,6 +133,6 @@ public class SysIdLogger {
     }
 
     boolean isWrongMechanism() {
-        return mechanism != "Arm" && mechanism != "Elevator" && mechanism != "Simple";
+        return mechanism.equals("Arm") && mechanism.equals("Elevator") && mechanism.equals("Simple");
     }
 }

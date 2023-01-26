@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.SysId.Logging.SysIdDrivetrainLogger;
+import frc.robot.SysId.Logging.SysIdGeneralMechanismLogger;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -15,8 +15,10 @@ import frc.robot.SysId.Logging.SysIdDrivetrainLogger;
  * project.
  */
 public class Robot extends TimedRobot {
-  private SysIdDrivetrainLogger sysid = new SysIdDrivetrainLogger();
-  private Drive drive = new Drive();
+  //private SysIdDrivetrainLogger sysid = new SysIdDrivetrainLogger();
+  private SysIdGeneralMechanismLogger sysid = new SysIdGeneralMechanismLogger();
+  //private Drive drive = new Drive();
+  private Arm arm = new Arm();
   private Notifier sysidLoop = new Notifier(this::sysidRun);
 
   @Override
@@ -26,7 +28,7 @@ public class Robot extends TimedRobot {
   }
 
   private void sysidRun() {
-    sysid.log(
+    /*sysid.log(
       sysid.measureVoltage(drive.getLeftMotors()),
       sysid.measureVoltage(drive.getRightMotors()), 
       drive.getLeftDistanceMeters(), 
@@ -36,16 +38,24 @@ public class Robot extends TimedRobot {
       drive.getGyroAngle().getDegrees(), 
       drive.getGyroRate()
     );
-    sysid.setMotorControllers(sysid.getLeftMotorVoltage(), drive.getLeftMotors());
+    sysid.setMotorControllers(-sysid.getLeftMotorVoltage(), drive.getLeftMotors());
     sysid.setMotorControllers(sysid.getRightMotorVoltage(), drive.getRightMotors());
+    */
+    sysid.log(
+      sysid.measureVoltage(arm.getMotor()), 
+      arm.getPosition(), 
+      arm.getVelocity()
+    );
+    sysid.setMotorControllers(sysid.getMotorVoltage(), arm.getMotor());
   }
 
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
     sysidLoop.stop();
-    sysid.setMotorControllers(0, drive.getLeftMotors());
-    sysid.setMotorControllers(0, drive.getRightMotors());
+    //sysid.setMotorControllers(0, drive.getLeftMotors());
+    //sysid.setMotorControllers(0, drive.getRightMotors());
+    sysid.setMotorControllers(0, arm.getMotor());
     sysid.sendData();
   }
 }
