@@ -92,5 +92,30 @@ public class Drive extends SubsystemBase {
   public void periodic() {
 
   }
+
+public double getLeftDistanceRotations() {
+  // divide by 2048 for shaft rots
+  return Left_Front.getSelectedSensorPosition() / 2048;
+}
+
+public double getRightDistanceRotations() {
+  return Right_Front.getSelectedSensorPosition() / 2048;
+}
+
+public double getLeftVelocityRps() {
+  double raw = Left_Front.getSelectedSensorVelocity();
+  // ticks per sec = ticks per 100ms * 10
+  double perSec = raw * 10;
+  // 2048 ticks = 1 rot
+  return perSec / 2048.0;
+}
+
+public double getRightVelocityRps() {
+  double raw = Right_Front.getSelectedSensorVelocity();
+  // ticks per sec = ticks per 100ms * 10
+  double perSec = raw * 10;
+  // 2048 ticks = 1 rot
+  return perSec / 2048.0;
+}
   
 }
