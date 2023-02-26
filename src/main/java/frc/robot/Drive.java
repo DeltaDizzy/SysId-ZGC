@@ -45,7 +45,7 @@ public class Drive extends SubsystemBase {
     Left_Back.setInverted(InvertType.FollowMaster);
     Right_Back.setInverted(InvertType.FollowMaster);
 
-    LeftMCG.setInverted(true);
+    RightMCG.setInverted(true);
   }
 
   /**
@@ -66,7 +66,7 @@ public class Drive extends SubsystemBase {
   }
 
   public Rotation2d getGyroAngle() {
-    return gyro.getRotation2d();
+    return Rotation2d.fromDegrees(-gyro.getAngle());
   }
 
   //#region SysId Getters
@@ -99,7 +99,7 @@ public double getLeftDistanceRotations() {
 }
 
 public double getRightDistanceRotations() {
-  return Right_Front.getSelectedSensorPosition() / 2048;
+  return -(Right_Front.getSelectedSensorPosition() / 2048);
 }
 
 public double getLeftVelocityRps() {
@@ -115,7 +115,7 @@ public double getRightVelocityRps() {
   // ticks per sec = ticks per 100ms * 10
   double perSec = raw * 10;
   // 2048 ticks = 1 rot
-  return perSec / 2048.0;
+  return -(perSec / 2048.0);
 }
   
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Threads;
@@ -58,6 +59,18 @@ public class SysIdLogger {
             sum += falcon.getMotorOutputVoltage();
             if (Robot.isSimulation()) {
                 System.out.println("Recording CTRE Voltage\n");
+            }
+        }
+        return sum / controllers.size();
+    }
+
+    public double measureVoltageSparkMax(List<CANSparkMax> controllers) {
+        double sum = 0.0;
+        for (int i = 0; i < controllers.size(); ++i) {
+            CANSparkMax spark = controllers.get(i);
+            sum += spark.getBusVoltage() * spark.getAppliedOutput();
+            if (Robot.isSimulation()) {
+                System.out.println("Recording REV Voltage\n");
             }
         }
         return sum / controllers.size();
@@ -128,6 +141,12 @@ public class SysIdLogger {
 
     public void setMotorControllers(double volts, List<WPI_TalonFX> motors) {
         for (WPI_TalonFX motor : motors) {
+            motor.setVoltage(volts);
+        }
+    }
+
+    public void setMotorControllersSparkMax(double volts, List<CANSparkMax> motors) {
+        for (CANSparkMax motor : motors) {
             motor.setVoltage(volts);
         }
     }
